@@ -53,7 +53,7 @@ st.write("Mã hóa cột Sex và one-hot encoding cho Embarked và Title:")
 df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
 
 # One-hot encoding cho Embarked và Title
-df = pd.get_dummies(df, columns=["Embarked"])
+df = pd.get_dummies(df, columns=["Embarked"],drop_first=True)
 
 st.write("Dữ liệu sau khi mã hóa:")
 st.write(df)
@@ -195,20 +195,31 @@ with st.form("prediction_form"):
         embarked = st.selectbox("Embarked", ["C", "Q", "S"])
 
     if st.form_submit_button("Predict Survival"):
-        # Xử lý input giống hệt processing_titanic
+        # Encode biến Sex: female -> 1, male -> 0
         sex_encoded = 1 if sex == "female" else 0
-        embarked_encoded = {'C': 0, 'Q': 1, 'S': 2}[embarked]
+        
+        # One-hot encoding cho biến embarked (với "C" là baseline: cả 2 dummy = 0)
+        if embarked == "C":
+            embarked_Q = 0
+            embarked_S = 0
+        elif embarked == "Q":
+            embarked_Q = 1
+            embarked_S = 0
+        else:  # embarked == "S"
+            embarked_Q = 0
+            embarked_S = 1
         
         # Tạo DataFrame input theo thứ tự đặc trưng khi train:
         # ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked_Q", "Embarked_S"]
         input_df = pd.DataFrame({
             "Pclass": [int(pclass)],
-            sex_encoded,
+            "Sex": [sex_encoded],
             "Age": [float(age)],
             "SibSp": [int(sibsp)],
             "Parch": [int(parch)],
             "Fare": [float(fare)],
-            embarked_encoded
+            "Embarked_Q": [embarked_Q],
+            "Embarked_S": [embarked_S]
         })
         
         # Áp dụng scaling cho các cột số sử dụng scaler đã fit trước đó
