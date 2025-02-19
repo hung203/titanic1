@@ -17,7 +17,7 @@ st.title("Tiền xử lý dữ liệu Titanic cho Multiple Regression")
 st.header("1. Tải dữ liệu Titanic")
 df = pd.read_csv("titanic.csv")
 st.write("Dữ liệu ban đầu:")
-st.write(df.head())
+st.write(df)
 
 # Xử lý giá trị thiếu
 st.header("2. Xử lý giá trị thiếu")
@@ -43,7 +43,7 @@ df["Embarked"].fillna(df["Embarked"].mode()[0], inplace=True)
 # Xóa cột Cabin
 df.drop("Cabin", axis=1, inplace=True)
 st.write("#### Dữ liệu sau khi xử lý giá trị thiếu:")
-st.write(df.head())
+st.write(df)
 
 # Mã hóa dữ liệu
 st.header("3. Mã hóa dữ liệu")
@@ -56,7 +56,7 @@ df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
 df = pd.get_dummies(df, columns=["Embarked"], drop_first=True)
 
 st.write("Dữ liệu sau khi mã hóa:")
-st.write(df.head())
+st.write(df)
 
 # Xóa các cột không cần thiết
 st.header("4. Xóa các cột không cần thiết")
@@ -66,7 +66,7 @@ st.write("Xóa các cột PassengerId, Name, và Ticket:")
 df.drop(["PassengerId", "Name", "Ticket"], axis=1, inplace=True)
 
 st.write("Dữ liệu sau khi xóa các cột không cần thiết:")
-st.write(df.head())
+st.write(df)
 
 # Chuẩn hóa dữ liệu
 st.header("5. Chuẩn hóa dữ liệu")
@@ -78,7 +78,7 @@ numerical_features = ["Age", "Fare", "SibSp", "Parch"]
 df[numerical_features] = scaler.fit_transform(df[numerical_features])
 
 st.write("Dữ liệu sau khi chuẩn hóa:")
-st.write(df.head())
+st.write(df)
 
 #chia dữ liệu và train mô hình
 st.header("6. Chia dữ liệu")
