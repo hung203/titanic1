@@ -53,7 +53,7 @@ st.write("Mã hóa cột Sex và one-hot encoding cho Embarked và Title:")
 df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
 
 # One-hot encoding cho Embarked và Title
-df = pd.get_dummies(df, columns=["Embarked"], drop_first=True)
+df = pd.get_dummies(df, columns=["Embarked"])
 
 st.write("Dữ liệu sau khi mã hóa:")
 st.write(df)
