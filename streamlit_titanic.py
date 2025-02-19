@@ -195,31 +195,20 @@ with st.form("prediction_form"):
         embarked = st.selectbox("Embarked", ["C", "Q", "S"])
 
     if st.form_submit_button("Predict Survival"):
-        # Encode biến Sex: female -> 1, male -> 0
+        # Xử lý input giống hệt processing_titanic
         sex_encoded = 1 if sex == "female" else 0
-        
-        # One-hot encoding cho biến embarked (với "C" là baseline: cả 2 dummy = 0)
-        if embarked == "C":
-            embarked_Q = 0
-            embarked_S = 0
-        elif embarked == "Q":
-            embarked_Q = 1
-            embarked_S = 0
-        else:  # embarked == "S"
-            embarked_Q = 0
-            embarked_S = 1
+        embarked_encoded = {'C': 0, 'Q': 1, 'S': 2}[embarked]
         
         # Tạo DataFrame input theo thứ tự đặc trưng khi train:
         # ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked_Q", "Embarked_S"]
         input_df = pd.DataFrame({
             "Pclass": [int(pclass)],
-            "Sex": [sex_encoded],
+            sex_encoded,
             "Age": [float(age)],
             "SibSp": [int(sibsp)],
             "Parch": [int(parch)],
             "Fare": [float(fare)],
-            "Embarked_Q": [embarked_Q],
-            "Embarked_S": [embarked_S]
+            embarked_encoded
         })
         
         # Áp dụng scaling cho các cột số sử dụng scaler đã fit trước đó
